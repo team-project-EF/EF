@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>    
+    <title>AreYouIdol?</title>
+</head>
+
+<script>
+    // 미리보기
+    function setImage(event) {
+        if (document.getElementById('btn_label1').style.display=='none') {
+            document.getElementById('btn_label2').style.display = 'none'
+            document.getElementById('btn_label1').style.display = 'inline'
+        }
+
+        if (document.querySelector("div#image_container").hasChildNodes()) {
+            document.querySelector("div#image_container").replaceChildren()
+        }
+        var reader = new FileReader();
+
+        reader.onload = function(event) {
+            var img = document.createElement("img");
+            img.setAttribute("src", event.target.result);
+            img.setAttribute("width", "400")
+            document.querySelector("div#image_container").appendChild(img);
+            document.querySelector("div#br_container").appendChild(document.createElement("br"))
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
+<body>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <h1>당신은 아이돌상 인가요?</h1>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <div id='image_container'>
+                    <label id='btn_label2' for="img" class="btn btn-primary">업로드할 사진을 골라주세요</label>
+                </div>
+                <div id='br_container'>
+
+                </div>
+                {% if messages %}
+                    <div class="messages">
+                        
+                    </div>
+                {% endif %}
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label id='btn_label1' for="img" class="btn btn-primary" style="display: none;">다른 사진 선택</label>
+                        <input type="file" id='img' class='from-control' name='img' style='display: none;' onchange="setImage(event)">
+                    </div>
+                      <button id='img_check_btn' type="submit" class="btn btn-primary">확인하기!</button>
+                </form>
+            </div>
+
+            <div class="col-12">
+                <h1></h1>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
