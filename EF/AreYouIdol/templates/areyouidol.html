@@ -16,7 +16,7 @@
     function setImage(event) {
         if (document.getElementById('btn_label1').style.display=='none') {
             document.getElementById('btn_label2').style.display = 'none'
-            document.getElementById('btn_label1').style.display = 'inline'
+            document.getElementById('btn_label1').style.display = 'inline-block'
         }
 
         if (document.querySelector("div#image_container").hasChildNodes()) {
@@ -27,9 +27,9 @@
         reader.onload = function(event) {
             var img = document.createElement("img");
             img.setAttribute("src", event.target.result);
-            img.setAttribute("width", "400")
+            img.setAttribute("width", "450")
+            document.getElementById('image_container').style.minHeight = '';
             document.querySelector("div#image_container").appendChild(img);
-            document.querySelector("div#br_container").appendChild(document.createElement("br"))
         };
 
         reader.readAsDataURL(event.target.files[0]);
@@ -43,21 +43,21 @@
                 <h1>당신은 아이돌상 인가요?</h1>
             </div>
         </div>
-        <div class="row mt-5">
+        <div class="row mt-5 text-center">
             <div class="col-12">
-                <div id='image_container'>
-                    <label id='btn_label2' for="img" class="btn btn-primary">업로드할 사진을 골라주세요</label>
-                </div>
-                <div id='br_container'>
 
-                </div>
                 {% if messages %}
-                    <div class="messages">
+                    <div class="messages" id='image_container'>
                         {% for i in messages %}
-                            <img src="{{i}}" alt="" width="400">
+                            <img src="{{i}}" alt="" width="450">
                         {% endfor %}
                     </div>
+                {% else %}
+                <div id='image_container' style="min-height: 400px;"></div>
                 {% endif %}
+                <br>
+                <label id='btn_label2' for="img" class="btn btn-primary">업로드할 사진을 골라주세요</label>
+
                 <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
