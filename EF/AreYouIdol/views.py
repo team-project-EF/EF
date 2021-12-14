@@ -6,7 +6,7 @@ from AreYouIdol.models import Upload
 def find(request):
     if request.method == 'POST':
         print(request.POST)
-        img = request.FILES["img"]
+        img = request.FILES.get("img")
 
         upload = Upload()
         upload.img = img

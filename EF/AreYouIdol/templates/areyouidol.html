@@ -53,7 +53,9 @@
                 </div>
                 {% if messages %}
                     <div class="messages">
-                        
+                        {% for i in messages %}
+                            <img src="{{i}}" alt="" width="400">
+                        {% endfor %}
                     </div>
                 {% endif %}
                 <form action="" method="POST" enctype="multipart/form-data">
