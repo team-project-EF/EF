@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from AreYouIdol.models import Upload
 from .apps import AreyouidolConfig as cf
-from .PreProcessing.align_faces import crop
+# from .PreProcessing.align_faces import crop
 import numpy as np
 from PIL import Image
 import os
 import shutil
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 
 # Create your views here.
 def find(request):
@@ -15,6 +16,7 @@ def find(request):
         request.session['visited']=1
 
     print(request.session.session_key)
+    sess = request.session.session_key
 
     if request.method == 'POST':
         
@@ -22,39 +24,41 @@ def find(request):
         ex = os.path.splitext(str(img))[-1].lower()
 
         if ex in ['.jpg', '.jpeg', '.png']:
-            if os.path.exists(cf.img_path):
-                shutil.rmtree(cf.img_path)
-            if os.path.exists(cf.crop_path):
-                shutil.rmtree(cf.crop_path)
+            # 파일이름 : 세션키 + 확장자명
+            file_name = sess + ex
 
-            upload = Upload()
-            upload.img = img
-            upload.save()
+            # 같은 파일의 이름(같은 세션에서 업로드한 파일)이 존재하면 삭제
+            if os.path.exists(os.path.join(cf.img_path, file_name)):
+                os.remove(os.path.join(cf.img_path, file_name))
+            if os.path.exists(os.path.join(cf.crop_path, file_name)):
+                os.remove(os.path.join(cf.crop_path, file_name))
 
-            # 크롭 전 이름 변경
-            img_path = os.path.join(cf.img_path, str(img))
-            file_path  = os.path.join(cf.img_path, 'up_img'+ex)
-            os.rename(img_path, file_path)
+            # 이미지 저장
+            img_path = default_storage.save('images/' + file_name, img)
 
-            crop()
+            file_path = os.path.join('media',img_path)
 
-            # 모델 예측
-            model = cf.model
-            file_name = os.path.basename(file_path)
-            crop_path = os.path.join(cf.crop_path, file_name)
-            crop_img = Image.open(crop_path)
-            crop_img = crop_img.convert('RGB')
-            data = np.asarray(crop_img)
-            X = np.array(data)
-            X = X.astype("float") / 255
-            X = X.reshape(-1, 128, 128, 3)
-            categories = ["idol", "ilban"]
-            pred = model.predict(X)
-            print(np.array(pred)[0])
-            print(np.argmax(pred))
-            pred_result = [file_path, categories[np.argmax(pred)]]
 
-            messages.add_message(request, messages.SUCCESS, pred_result)
+            # 이후 작업시 주석 해제
+            # crop()
+
+            # # 모델 예측
+            # model = cf.model
+            # crop_path = os.path.join(cf.crop_path, file_name)
+            # crop_img = Image.open(crop_path)
+            # crop_img = crop_img.convert('RGB')
+            # data = np.asarray(crop_img)
+            # X = np.array(data)
+            # X = X.astype("float") / 255
+            # X = X.reshape(-1, 128, 128, 3)
+            # categories = ["idol", "ilban"]
+            # pred = model.predict(X)
+            # print(np.array(pred)[0])
+            # print(np.argmax(pred))
+            # pred_result = [file_path, categories[np.argmax(pred)]]
+
+            messages.add_message(request, messages.SUCCESS, file_path)
+            
             return redirect('/')
         else:
             messages.add_message(request, messages.ERROR,
