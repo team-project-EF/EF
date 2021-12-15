@@ -49,7 +49,18 @@
                 {% if messages %}
                     <div class="messages" id='image_container'>
                         {% for i in messages %}
-                            <img src="{{i}}" alt="" width="450">
+                          {% if i.tags == 'success' %}
+                            <div>
+                                <!-- <img src="{{i.1}}" alt="" width="450"> -->
+                            </div>
+                            <div>
+                                
+                            </div>
+                          {% else %}
+                            <script>
+                              alert("{{i}}")
+                            </script>
+                          {% endif %}
                         {% endfor %}
                     </div>
                 {% else %}
@@ -76,4 +87,3 @@
 
 </body>
 </html>
-
