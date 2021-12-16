@@ -52,9 +52,9 @@ def find(request):
             print(np.array(pred)[0][np.argmax(pred)])
             print('아이돌' if np.array(pred)[0][np.argmax(pred)] > 0.3619023 else '일반')
 
-            messages.add_message(request, messages.INFO, '당신은 아이돌상에 가깝습니다. 축하드려요!') if np.array(pred)[0][np.argmax(pred)] > 0.37 else messages.add_message(request, messages.INFO, '당신은 아이돌상과는 거리가 멉니다. 좀 더 노력하세요!')
-            
             messages.add_message(request, messages.SUCCESS, file_path)
+
+            messages.add_message(request, messages.INFO, '축하드려요! 당신은 아이돌상에 가깝습니다.') if np.array(pred)[0][np.argmax(pred)] > 0.37 else messages.add_message(request, messages.INFO, '당신은 아이돌상과는 거리가 멉니다. 좀 더 노력하세요!')
 
             return redirect('/')
         else:

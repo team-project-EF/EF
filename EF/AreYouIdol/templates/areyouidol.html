@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>    
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>AreYouIdol?</title>
 </head>
 
@@ -34,6 +36,16 @@
 
         reader.readAsDataURL(event.target.files[0]);
     }
+
+    function submit_event(){
+        Swal.fire({
+            title: '로딩중..',
+            text: '열심히 분석 중이에요!',
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        })
+    }
 </script>
 
 <body>
@@ -53,12 +65,21 @@
                             <div>
                                 <img src="{{i}}" alt="" width="450">
                             </div>
-                            <div>
-                                
-                            </div>
-                          {% else %}
+                          {% elif i.tags == 'info' %}
+                          <script>
+                            Swal.fire({
+                                icon: 'success',
+                                title: '확인 완료!',
+                                text: "{{i}}"
+                            })
+                          </script>  
+                          {% elif i.tags == 'error' %}
                             <script>
-                              alert("{{i}}")
+                              Swal.fire({
+                                  icon: 'error',
+                                  title: '파일처리 에러',
+                                  text: "{{i}}"
+                              })
                             </script>
                           {% endif %}
                         {% endfor %}
@@ -75,7 +96,7 @@
                         <label id='btn_label1' for="img" class="btn btn-primary" style="display: none;">다른 사진 선택</label>
                         <input type="file" id='img' class='from-control' name='img' style='display: none;' onchange="setImage(event)">
                     </div>
-                      <button id='img_check_btn' type="submit" class="btn btn-primary">확인하기!</button>
+                      <button id='img_check_btn' type="submit" class="btn btn-primary" onclick="submit_event()">확인하기!</button>
                 </form>
             </div>
 
