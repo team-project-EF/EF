@@ -49,11 +49,16 @@
 </script>
 
 <body>
-    <div class="container">
+    <div class="container" id = 'divPosition'>
         <div class="row mt-5">
             <div class="col-12 text-center">
                 <h1>당신은 아이돌상 인가요?</h1>
+                <br>
+                <label id='btn_label2' for="img" class="btn btn-primary">사진 선택</label>
+                <label id='btn_label1' for="img" class="btn btn-primary" style="display: none;">다른 사진 선택</label>
+                <label id='btn_lable3' for='img_check_btn' class="btn btn-primary">확인하기!</label>
             </div>
+            
         </div>
         <div class="row mt-5 text-center">
             <div class="col-12">
@@ -85,18 +90,18 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                <div id='image_container' style="min-height: 400px;"></div>
+                <div id='image_container'></div>
                 {% endif %}
                 <br>
-                <label id='btn_label2' for="img" class="btn btn-primary">업로드할 사진을 골라주세요</label>
+                
 
                 <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label id='btn_label1' for="img" class="btn btn-primary" style="display: none;">다른 사진 선택</label>
+                        
                         <input type="file" id='img' class='from-control' name='img' style='display: none;' onchange="setImage(event)">
                     </div>
-                      <button id='img_check_btn' type="submit" class="btn btn-primary" onclick="submit_event()">확인하기!</button>
+                      <button id='img_check_btn' type="submit" class="btn btn-primary" onclick="submit_event()" style="display: none;">확인하기!</button>
                 </form>
             </div>
 
