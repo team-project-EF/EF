@@ -36,8 +36,6 @@ def find(request):
 
             file_path = os.path.join('media',img_path)
 
-
-            # 이후 작업시 주석 해제
             crop(file_name)
 
             # 모델 예측
@@ -49,17 +47,20 @@ def find(request):
             X = np.array(data)
             X = X.astype("float") / 255
             X = X.reshape(-1, 128, 128, 3)
-            categories = ["idol", "ilban"]
-            pred = model.predict(X)
-            print(np.array(pred)[0])
-            print(categories[np.argmax(pred)])
 
-            messages.add_message(request, messages.SUCCESS, file_path)
+            pred = model.predict(X)
+            print(np.array(pred)[0][np.argmax(pred)])
+            print('아이돌' if np.array(pred)[0][np.argmax(pred)] > 0.3619023 else '일반')
+
+            messages.add_message(request, messages.INFO, '당신은 아이돌상에 가깝습니다. 축하드려요!') if np.array(pred)[0][np.argmax(pred)] > 0.37 else messages.add_message(request, messages.INFO, '당신은 아이돌상과는 거리가 멉니다. 좀 더 노력하세요!')
             
+            messages.add_message(request, messages.SUCCESS, file_path)
+
             return redirect('/')
         else:
             messages.add_message(request, messages.ERROR,
                                  '이미지(jpg, jpeg, png) 파일을 업로드 해주세요.')
+
             return redirect('/')
     else:
         return render(request, 'areyouidol.html')
