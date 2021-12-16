@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .apps import AreyouidolConfig as cf
-# from .PreProcessing.align_faces import crop
+from .PreProcessing.align_faces import crop
 import numpy as np
 from PIL import Image
 import os
-import shutil
-from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
 # Create your views here.
@@ -33,29 +31,28 @@ def find(request):
             if os.path.exists(os.path.join(cf.crop_path, file_name)):
                 os.remove(os.path.join(cf.crop_path, file_name))
 
-            # 이미지 저장
+            # 이미지 저장 경로
             img_path = default_storage.save('images/' + file_name, img)
 
             file_path = os.path.join('media',img_path)
 
 
             # 이후 작업시 주석 해제
-            # crop()
+            crop(file_name)
 
-            # # 모델 예측
-            # model = cf.model
-            # crop_path = os.path.join(cf.crop_path, file_name)
-            # crop_img = Image.open(crop_path)
-            # crop_img = crop_img.convert('RGB')
-            # data = np.asarray(crop_img)
-            # X = np.array(data)
-            # X = X.astype("float") / 255
-            # X = X.reshape(-1, 128, 128, 3)
-            # categories = ["idol", "ilban"]
-            # pred = model.predict(X)
-            # print(np.array(pred)[0])
-            # print(np.argmax(pred))
-            # pred_result = [file_path, categories[np.argmax(pred)]]
+            # 모델 예측
+            model = cf.model
+            crop_image = os.path.join(cf.crop_path, file_name)
+            crop_img = Image.open(crop_image)
+            crop_img = crop_img.convert('RGB')
+            data = np.asarray(crop_img)
+            X = np.array(data)
+            X = X.astype("float") / 255
+            X = X.reshape(-1, 128, 128, 3)
+            categories = ["idol", "ilban"]
+            pred = model.predict(X)
+            print(np.array(pred)[0])
+            print(categories[np.argmax(pred)])
 
             messages.add_message(request, messages.SUCCESS, file_path)
             
