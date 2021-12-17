@@ -66,27 +66,27 @@
                 {% if messages %}
                     <div class="messages" id='image_container'>
                         {% for i in messages %}
-                          {% if i.tags == 'success' %}
-                            <div>
-                                <img src="{{i}}" alt="" width="450">
-                            </div>
-                          {% elif i.tags == 'info' %}
-                          <script>
-                            Swal.fire({
-                                icon: 'success',
-                                title: '확인 완료!',
-                                text: "{{i}}"
-                            })
-                          </script>  
-                          {% elif i.tags == 'error' %}
-                            <script>
-                              Swal.fire({
-                                  icon: 'error',
-                                  title: '파일처리 에러',
-                                  text: "{{i}}"
-                              })
-                            </script>
-                          {% endif %}
+                            {% if i.tags == 'success' %}
+                                <div>
+                                    <img src="{{i}}" alt="" width="450">
+                                </div>
+                            {% elif i.tags == 'info' %}
+                                <script>
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: '확인 완료!',
+                                        text: "{{i}}"
+                                    })
+                                </script>  
+                            {% elif i.tags == 'error' %}
+                                <script>
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '파일처리 에러',
+                                        text: "{{i}}"
+                                    })
+                                </script>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 {% else %}
@@ -94,7 +94,6 @@
                 {% endif %}
                 <br>
                 
-
                 <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">

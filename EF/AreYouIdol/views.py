@@ -49,8 +49,6 @@ def find(request):
             X = X.reshape(-1, 128, 128, 3)
 
             pred = model.predict(X)
-            print(np.array(pred)[0][np.argmax(pred)])
-            print('아이돌' if np.array(pred)[0][np.argmax(pred)] > 0.3619023 else '일반')
 
             messages.add_message(request, messages.SUCCESS, file_path)
 
