@@ -21,7 +21,7 @@
 ##### 활용언어 및 라이브러리, 사용환경
 
 
-- Google Colab
+- Google Colab 및 개인 GPU 활용 로컬 환경
 - Python
 - Tensorflow
 - Keras
